@@ -1,0 +1,27 @@
+###########################
+## Replant Configuration ##
+###########################
+
+ enabled: true
+
+ crops:
+   - Wheat
+   - Carrot
+   - Potato
+   - Nether_Wart
+   - Nether_Stalk
+
+ 
+   
+ immature-crops: false
+ 
+ everywhere: false
+ 
+ world-guard-integration: true
+ 
+ whitelisted-regions:
+   - spawn
+   - public_spawn
+    
+ blacklisted-regions:
+   - player_homes

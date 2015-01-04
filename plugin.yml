@@ -1,0 +1,10 @@
+ name: Replant
+ version: 0.0.1
+ description: Automatically Replant Seeds After You Harvest Them
+ author: QuartzDev
+ 
+ main: com.quartzdev.replant.Replant
+
+ commands:
+   replant:
+     description: Basic Commands
