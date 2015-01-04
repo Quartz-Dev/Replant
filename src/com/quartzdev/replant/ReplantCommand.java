@@ -16,6 +16,7 @@ public class ReplantCommand implements CommandExecutor{
 	public ReplantCommand(Config config, Plugin plugin) {
 		this.config = config;
 		this.plugin = plugin;
+		
 	}
 	
 	
