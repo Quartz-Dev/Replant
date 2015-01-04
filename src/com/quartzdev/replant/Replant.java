@@ -10,16 +10,20 @@ public class Replant extends JavaPlugin{
 	
 	private static Logger log = Bukkit.getLogger();
 	private final static String PREFIX = "[Replant] ";
+	Messages messages;
 	
 	@Override
 	public void onEnable() {
 		
 		Config config = new Config(this.getConfig());
+		messages = new Messages();
 		
 		HarvestListener harvestListener = new HarvestListener(config);
+		ReplantCommand replantCommand = new ReplantCommand(config);
 		
 		if(config.enabled()) {
 			this.getServer().getPluginManager().registerEvents(harvestListener, this);
+			this.getCommand("replant").setExecutor(replantCommand);
 		}else{
 			log("Replant is disabling because it is disabled in the config.");
 		}
