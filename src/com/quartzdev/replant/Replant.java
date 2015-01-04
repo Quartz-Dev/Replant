@@ -9,7 +9,9 @@ public class Replant extends JavaPlugin{
 	@Override
 	public void onEnable() {
 		
-		HarvestListener harvestListener = new HarvestListener();
+		Config config = new Config(this.getConfig());
+		
+		HarvestListener harvestListener = new HarvestListener(config);
 		this.getServer().getPluginManager().registerEvents(harvestListener, this);
 		
 	}
