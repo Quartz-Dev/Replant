@@ -9,24 +9,20 @@ import org.bukkit.configuration.Configuration;
 public class Config {
 	
 	public Configuration config;
+	private boolean immatureCrops;
+	private boolean enabled;
+	private boolean everywhere;
+	private Material[] crops;
+	private boolean worldGuard;
+	private String[] whitelisted;
+	private String[] blacklisted;
 	
 	public Config(Configuration config){
 		this.config = config;
-	}
-	
-	public boolean usingImmatureCrops() {
-		return config.getBoolean("immature-crops");
-	}
-	
-	public boolean enabled() {
-		return config.getBoolean("enabled");
-	}
-	
-	public boolean isEverywhere() {
-		return config.getBoolean("everywhere");
-	}
-	
-	public Material[] getCrops() {
+		immatureCrops = config.getBoolean("immature-crops");
+		enabled = config.getBoolean("enabled");
+		everywhere = config.getBoolean("everywhere");
+		
 		List<String> cropsString = config.getStringList("crops");
 		List<Material> crops = new ArrayList<Material>();
 		for(String s : cropsString) {
@@ -34,26 +30,46 @@ public class Config {
 		}
 		Material[] m = new Material[crops.size()];
 		m = crops.toArray(m);
-		return m;
+		this.crops = m;
+		
+		List<String> whitelisted = config.getStringList("whitelisted-regions");
+		String[] white = new String[whitelisted.size()];
+		white = whitelisted.toArray(white);
+		this.whitelisted = white;
+		
+		List<String> blacklisted = config.getStringList("whitelisted-regions");
+		String[] black = new String[blacklisted.size()];
+		black = blacklisted.toArray(black);
+		this.blacklisted = black;
+	}
+	
+	public boolean usingImmatureCrops() {
+		return immatureCrops;
+	}
+	
+	public boolean enabled() {
+		return enabled;
+	}
+	
+	public boolean isEverywhere() {
+		return everywhere;
+	}
+	
+	public Material[] getCrops() {
+		return crops;
 	}
 	
 	
 	public boolean worldGuardIntegration() {
-		return config.getBoolean("world-guard-integration");
+		return worldGuard;
 	}
 	
 	public String[] getWhitelistedRegions() {
-		List<String> whitelisted = config.getStringList("whitelisted-regions");
-		String[] s = new String[whitelisted.size()];
-		s = whitelisted.toArray(s);
-		return s;
+		return whitelisted;
 	}
 	
 	public String[] getBlacklistedRegions() {
-		List<String> blacklisted = config.getStringList("whitelisted-regions");
-		String[] s = new String[blacklisted.size()];
-		s = blacklisted.toArray(s);
-		return s;
+		return blacklisted;
 	}
 
 }
