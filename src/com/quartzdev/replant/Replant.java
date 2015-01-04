@@ -19,7 +19,7 @@ public class Replant extends JavaPlugin{
 		messages = new Messages();
 		
 		HarvestListener harvestListener = new HarvestListener(config);
-		ReplantCommand replantCommand = new ReplantCommand(config);
+		ReplantCommand replantCommand = new ReplantCommand(config, this);
 		
 		if(config.enabled()) {
 			this.getServer().getPluginManager().registerEvents(harvestListener, this);

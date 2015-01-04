@@ -13,12 +13,12 @@ public class Messages {
 		resource = ResourceBundle.getBundle(MESSAGES);
 	}
 	
-	public static String msg(String msg) {
+	public static String msg(String msg, Object... objects) {
 		if(instance == null){
 			return "";
 		}
 		
-		return instance.translate(msg);
+		return instance.translate(String.format(msg, objects));
 	}
 	
 	private String translate(String msg) {
