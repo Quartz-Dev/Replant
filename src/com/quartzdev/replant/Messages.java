@@ -17,7 +17,7 @@ public class Messages {
 		if(instance == null){
 			return "";
 		}
-		
+		// TODO: Fix this, it won't work at all
 		return instance.translate(String.format(msg, objects));
 	}
 	
