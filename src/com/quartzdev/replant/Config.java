@@ -8,39 +8,29 @@ import org.bukkit.configuration.Configuration;
 
 public class Config {
 	
-	public Configuration config;
 	private boolean immatureCrops;
 	private boolean enabled;
 	private boolean everywhere;
-	private Material[] crops;
+	private List<Material> crops;
 	private boolean worldGuard;
-	private String[] whitelisted;
-	private String[] blacklisted;
+	private List<String> whitelisted;
+	private List<String> blacklisted;
 	
-	public Config(Configuration config){
-		this.config = config;
+	public Config(Configuration config) {
 		immatureCrops = config.getBoolean("immature-crops");
 		enabled = config.getBoolean("enabled");
 		everywhere = config.getBoolean("everywhere");
 		
 		List<String> cropsString = config.getStringList("crops");
 		List<Material> crops = new ArrayList<Material>();
-		for(String s : cropsString) {
+		for (String s : cropsString) {
 			crops.add(Material.valueOf(s));
 		}
-		Material[] m = new Material[crops.size()];
-		m = crops.toArray(m);
-		this.crops = m;
+		this.crops = crops;
 		
-		List<String> whitelisted = config.getStringList("whitelisted-regions");
-		String[] white = new String[whitelisted.size()];
-		white = whitelisted.toArray(white);
-		this.whitelisted = white;
+		this.whitelisted = config.getStringList("whitelisted-regions");
 		
-		List<String> blacklisted = config.getStringList("whitelisted-regions");
-		String[] black = new String[blacklisted.size()];
-		black = blacklisted.toArray(black);
-		this.blacklisted = black;
+		this.blacklisted = config.getStringList("whitelisted-regions");
 	}
 	
 	public boolean usingImmatureCrops() {
@@ -55,21 +45,20 @@ public class Config {
 		return everywhere;
 	}
 	
-	public Material[] getCrops() {
+	public List<Material> getCrops() {
 		return crops;
 	}
-	
 	
 	public boolean worldGuardIntegration() {
 		return worldGuard;
 	}
 	
-	public String[] getWhitelistedRegions() {
+	public List<String> getWhitelistedRegions() {
 		return whitelisted;
 	}
 	
-	public String[] getBlacklistedRegions() {
+	public List<String> getBlacklistedRegions() {
 		return blacklisted;
 	}
-
+	
 }
