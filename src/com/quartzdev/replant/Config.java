@@ -8,18 +8,17 @@ import org.bukkit.configuration.Configuration;
 
 public class Config {
 	
+	private Configuration config;
 	private boolean immatureCrops;
 	private boolean enabled;
-	private boolean everywhere;
 	private List<Material> crops;
-	private boolean worldGuard;
-	private List<String> whitelisted;
-	private List<String> blacklisted;
+	private boolean userDefault;
 	
 	public Config(Configuration config) {
+		this.config = config;
 		immatureCrops = config.getBoolean("immature-crops");
 		enabled = config.getBoolean("enabled");
-		everywhere = config.getBoolean("everywhere");
+		userDefault = config.getBoolean("default");
 		
 		List<String> cropsString = config.getStringList("crops");
 		List<Material> crops = new ArrayList<Material>();
@@ -28,9 +27,6 @@ public class Config {
 		}
 		this.crops = crops;
 		
-		this.whitelisted = config.getStringList("whitelisted-regions");
-		
-		this.blacklisted = config.getStringList("whitelisted-regions");
 	}
 	
 	public boolean usingImmatureCrops() {
@@ -41,24 +37,17 @@ public class Config {
 		return enabled;
 	}
 	
-	public boolean isEverywhere() {
-		return everywhere;
-	}
-	
 	public List<Material> getCrops() {
 		return crops;
 	}
 	
-	public boolean worldGuardIntegration() {
-		return worldGuard;
+	public boolean getDefault() {
+		return userDefault;
 	}
 	
-	public List<String> getWhitelistedRegions() {
-		return whitelisted;
-	}
-	
-	public List<String> getBlacklistedRegions() {
-		return blacklisted;
+	public void setDefault(boolean userDefault) {
+		this.userDefault = userDefault;
+		config.set("default", userDefault);
 	}
 	
 }
