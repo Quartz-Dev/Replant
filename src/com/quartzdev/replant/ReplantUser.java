@@ -3,6 +3,7 @@ package com.quartzdev.replant;
 import static com.quartzdev.replant.Messages.msg;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
@@ -10,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class ReplantUser {
 	
-	private static final File USER_FILE = new File("");
+	private static final File USER_FILE = new File("plugins" + File.separator + "Replant" + File.separator + "players.txt");
 	
 	boolean enabled;
 
@@ -39,6 +40,17 @@ public class ReplantUser {
 	}
 	
 	private static ReplantUser getUser(UUID id) {
+		USER_FILE.getParentFile().mkdirs();
+		if(!USER_FILE.exists()){
+			try {
+				USER_FILE.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
 		return null; // TODO
 	}
 	
