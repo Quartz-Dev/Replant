@@ -32,7 +32,7 @@ public class Replant extends JavaPlugin {
 		
 		ReplantUser.onEnable(config.getDefault());
 		
-		HarvestListener harvestListener = new HarvestListener(config, this);
+		HarvestListener harvestListener = new HarvestListener(config);
 		ReplantCommand replantCommand = new ReplantCommand(config, this);
 		
 		if (config.enabled()) {
