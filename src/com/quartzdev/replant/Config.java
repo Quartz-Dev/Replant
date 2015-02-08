@@ -31,7 +31,6 @@ public class Config {
 		userDefault = config.getBoolean("default");
 		delay = config.getLong("replace-delay");
 		forcedRegions = config.getStringList("forced-regions");
-		// TODO add forced regions to config.yml
 		
 		List<String> cropsString = config.getStringList("crops");
 		HashMap<Material, Material> crops = new HashMap<>();

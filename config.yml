@@ -2,6 +2,11 @@
 ## Replant Configuration ##
 ###########################
 
+###
+# Defines which crops should be replanted
+# when they are destroyed.
+# Default: [Crops, Carrot, Potato, Cocoa, Nether_Warts]
+# 
  crops:
    - Crops
    - Carrot
@@ -9,12 +14,35 @@
    - Cocoa
    - Nether_Warts
 
+###
+# This controls the delay (in ticks) of when
+# the crop gets replaced.
+# Default: 50
+# 
  replace-delay: 50
-   
+
+###
+# This controls whether or not immature (not fully grown)
+# crops should be replanted.
+# Default: false
+#
+# WARNING: It is recommended to not change this value
+#          because it may cause an infinite loop,
+#          allowing players to get infinite items.
+# 
  immature-crops: false
- 
+
+###
+# This controls the default option for new players
+# to the server. 
+# Default: true
+# 
  default: true
- 
+
+###
+# This controls which regions are forced when
+# WorldGuard is installed.
+# 
  forced-regions:
    - spawn
    - jail
