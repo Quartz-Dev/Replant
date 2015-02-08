@@ -2,9 +2,53 @@
  version: 0.1.1
  description: Automatically Replant Seeds After You Harvest Them
  author: QuartzDev
+ softdepend: [WorldGuard, WorldEdit]
  
+ database: false
  main: com.quartzdev.replant.Replant
 
  commands:
    replant:
      description: Basic Commands
+ 
+ permissions:
+   replant.*:
+     description: Allows access to all replant functionality
+     children:
+       replant.command.enable: true
+       replant.command.disable: true
+       replant.command.info: true
+       replant.command.unknown: true
+       replant.command.default: true
+       replant.allowforce: true
+       replant.replant: true
+   replant.command.*:
+     description: Allows access to all replant commands
+     children:
+       replant.command.enable: true
+       replant.command.disable: true
+       replant.command.info: true
+       replant.command.default: true
+   replant.overrideforce:
+     description: Allows the player to override protected regions.
+     default: op
+   replant.replant:
+     description: Allows the player have crops replanted
+     default: true
+   replant.command.enable:
+     description: Allows the player to enable their own replanting
+     default: true
+   replant.command.disable:
+     description: Allows the player to disable their own replanting
+     default: true
+   replant.command.info:
+     description: Allows the player to view information about the plugin
+     default: true
+   replant.command.unknown:
+     description: Allows the player to know they did an unknown command
+     default: true
+   replant.command.default:
+     description: Allows the player to do /replant without any arguments.
+     default: true
+     
+       

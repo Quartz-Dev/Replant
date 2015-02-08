@@ -17,8 +17,6 @@ public class Replant extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
-		// File realConfigFile = new File("plugins" + File.separator + "Replant"
-		// + File.separator + "config.yml");
 		this.saveDefaultConfig();
 		
 		Config config = new Config(this.getConfig(), this);

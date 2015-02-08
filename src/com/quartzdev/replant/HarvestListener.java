@@ -23,7 +23,7 @@ public class HarvestListener implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
-		if (event.isCancelled()) {
+		if (event.isCancelled() || !event.getPlayer().hasPermission("replant.replant")) {
 			return;
 		}
 		
@@ -31,7 +31,7 @@ public class HarvestListener implements Listener {
 		ReplantUser user = ReplantUser.getUser(event.getPlayer().getUniqueId());
 		
 		if (user != null) {
-			if (!user.isEnabled() && !config.isReplantForced(event.getBlock().getLocation())) {
+			if (!user.isEnabled() && (!config.isReplantForced(event.getBlock().getLocation()) || event.getPlayer().hasPermission("replant.overrideforce"))) {
 				return;
 			}
 		}

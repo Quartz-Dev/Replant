@@ -15,6 +15,7 @@ public class ReplantCommand implements CommandExecutor {
 	private static final String PREFIX = ChatColor.RED + "[" + ChatColor.AQUA + "Replant" + ChatColor.RED + "] " + ChatColor.GRAY;
 	private static final ChatColor RESET_COLOR = ChatColor.GRAY;
 	private static final ChatColor SECONDARY_COLOR = ChatColor.BLUE;
+	private static final ChatColor ALERT_COLOR = ChatColor.RED;
 	
 	public ReplantCommand(Config config, Plugin plugin) {
 		this.config = config;
@@ -27,8 +28,17 @@ public class ReplantCommand implements CommandExecutor {
 		ReplantUser user = (sender instanceof Player) ? ReplantUser.getUser(((Player) sender).getUniqueId()) : null;
 		
 		if (args.length == 0) {
+			if (!sender.hasPermission("replant.command.default")) {
+				sender.sendMessage(PREFIX + ALERT_COLOR + "You do not have anough permission.");
+				return false;
+			}
+			
 			String enabled = (user.isEnabled()) ? "enabled" : "disabled";
-			sender.sendMessage(PREFIX + "Replanting is currently " + enabled + ".");
+			if (config.isReplantForced(((Player) sender).getLocation())) {
+				sender.sendMessage(PREFIX + "Replanting is currently " + enabled + ". (Replanting is forced in this region.)");
+			} else {
+				sender.sendMessage(PREFIX + "Replanting is currently " + enabled + ".");
+			}
 		}
 		
 		if (args.length > 0) {
@@ -36,6 +46,11 @@ public class ReplantCommand implements CommandExecutor {
 				case "on":
 				case "enable":
 					if (user != null) {
+						if (!sender.hasPermission("replant.command.enable")) {
+							sender.sendMessage(PREFIX + ALERT_COLOR + "You do not have anough permission.");
+							return false;
+						}
+						
 						user.setEnabled(true);
 						if (config.isReplantForced(((Player) sender).getLocation())) {
 							sender.sendMessage(PREFIX + "Replanting is now enabled! (Replanting is forced in this region.)");
@@ -49,6 +64,11 @@ public class ReplantCommand implements CommandExecutor {
 				case "off":
 				case "disable":
 					if (user != null) {
+						if (!sender.hasPermission("replant.command.disable")) {
+							sender.sendMessage(PREFIX + ALERT_COLOR + "You do not have anough permission.");
+							return false;
+						}
+						
 						user.setEnabled(false);
 						if (config.isReplantForced(((Player) sender).getLocation())) {
 							sender.sendMessage(PREFIX + "Replanting is now disabled! (Replanting is forced in this region.)");
@@ -62,9 +82,12 @@ public class ReplantCommand implements CommandExecutor {
 				case "v":
 				case "version":
 				case "info":
+					if (!sender.hasPermission("replant.command.info")) {
+						sender.sendMessage(PREFIX + ALERT_COLOR + "You do not have anough permission.");
+						return false;
+					}
+					
 					sender.sendMessage(PREFIX + "Replant v" + plugin.getDescription().getVersion() + " by QuartzDev");
-					break;
-				default:
 					sender.sendMessage(PREFIX + "Replant automatically replants crops when broken.");
 					if (user != null) {
 						if (user.isEnabled()) {
@@ -73,6 +96,15 @@ public class ReplantCommand implements CommandExecutor {
 							sender.sendMessage(PREFIX + "Type " + SECONDARY_COLOR + "/replant on" + RESET_COLOR + " to enable.");
 						}
 					}
+					break;
+				default:
+					if (!sender.hasPermission("replant.command.unknown")) {
+						sender.sendMessage(PREFIX + ALERT_COLOR + "You do not have anough permission.");
+						return false;
+					}
+					
+					sender.sendMessage(PREFIX + ALERT_COLOR + "Unknown Command");
+					
 					break;
 			}
 		}
