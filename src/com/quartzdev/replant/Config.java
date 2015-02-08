@@ -4,8 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class Config {
 	
@@ -14,14 +19,19 @@ public class Config {
 	private long delay;
 	private HashMap<Material, Material> crops;
 	private boolean userDefault;
+	private Replant mainClass;
+	private List<String> forcedRegions;
 	
-	public Config(Configuration config) {
+	public Config(Configuration config, Replant mainClass) {
 		Bukkit.broadcastMessage("Config loaded!");
 		
+		this.mainClass = mainClass;
 		this.config = config;
 		immatureCrops = config.getBoolean("immature-crops");
 		userDefault = config.getBoolean("default");
 		delay = config.getLong("replace-delay");
+		forcedRegions = config.getStringList("forced-regions");
+		// TODO add forced regions to config.yml
 		
 		List<String> cropsString = config.getStringList("crops");
 		HashMap<Material, Material> crops = new HashMap<>();
@@ -63,6 +73,29 @@ public class Config {
 	public void setDefault(boolean userDefault) {
 		this.userDefault = userDefault;
 		config.set("default", userDefault);
+	}
+	
+	public List<String> getForcedRegions() {
+		return forcedRegions;
+	}
+	
+	public boolean isReplantForced(Location loc) {
+		
+		WorldGuardPlugin wgp = mainClass.getWorldGuard();
+		
+		if (wgp == null) {
+			return false;
+		}
+		
+		ApplicableRegionSet regions = wgp.getRegionManager(loc.getWorld()).getApplicableRegions(loc);
+		
+		List<String> forcedRegions = getForcedRegions();
+		for (ProtectedRegion r : regions) {
+			if (forcedRegions.contains(r.getId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

@@ -1,32 +1,27 @@
 package com.quartzdev.replant;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 public class Replant extends JavaPlugin {
 	
 	private static Logger log = Bukkit.getLogger();
-	private final static String PREFIX = "[Replant] ";
+	private final static String CONSOLE_PREFIX = "[Replant] ";
 	
 	@Override
 	public void onEnable() {
 		
-		File realConfigFile = new File("plugins" + File.separator + "Replant" + File.separator + "config.yml");
-		if (!realConfigFile.exists()) {
-			this.getConfig().options().copyDefaults(true);
-			try {
-				this.getConfig().save(realConfigFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		// File realConfigFile = new File("plugins" + File.separator + "Replant"
+		// + File.separator + "config.yml");
+		this.saveDefaultConfig();
 		
-		Config config = new Config(this.getConfig());
+		Config config = new Config(this.getConfig(), this);
 		
 		ReplantUser.onEnable(config.getDefault());
 		
@@ -45,12 +40,23 @@ public class Replant extends JavaPlugin {
 	
 	public static void log(Level level, String... messages) {
 		for (String message : messages) {
-			log.log(level, PREFIX + message);
+			log.log(level, CONSOLE_PREFIX + message);
 		}
 	}
 	
 	public static void log(String... messages) {
 		log(Level.INFO, messages);
+	}
+	
+	public WorldGuardPlugin getWorldGuard() {
+		Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+		
+		// WorldGuard may not be loaded
+		if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
+			return null; // Maybe you want throw an exception instead
+		}
+		
+		return (WorldGuardPlugin) plugin;
 	}
 	
 }

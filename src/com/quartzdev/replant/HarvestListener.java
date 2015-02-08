@@ -23,11 +23,15 @@ public class HarvestListener implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
+		
 		Material brokenMaterial = event.getBlock().getType();
 		ReplantUser user = ReplantUser.getUser(event.getPlayer().getUniqueId());
 		
 		if (user != null) {
-			if (!user.isEnabled()) {
+			if (!user.isEnabled() && !config.isReplantForced(event.getBlock().getLocation())) {
 				return;
 			}
 		}

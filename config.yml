@@ -9,8 +9,12 @@
    - Cocoa
    - Nether_Warts
 
- replace-delay: 100
+ replace-delay: 50
    
  immature-crops: false
  
  default: true
+ 
+ forced-regions:
+   - spawn
+   - jail

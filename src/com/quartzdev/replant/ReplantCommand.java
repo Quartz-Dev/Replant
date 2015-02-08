@@ -12,10 +12,13 @@ public class ReplantCommand implements CommandExecutor {
 	Config config;
 	Plugin plugin;
 	
+	private static final String PREFIX = ChatColor.RED + "[" + ChatColor.AQUA + "Replant" + ChatColor.RED + "] " + ChatColor.GRAY;
+	private static final ChatColor RESET_COLOR = ChatColor.GRAY;
+	private static final ChatColor SECONDARY_COLOR = ChatColor.BLUE;
+	
 	public ReplantCommand(Config config, Plugin plugin) {
 		this.config = config;
 		this.plugin = plugin;
-		
 	}
 	
 	@Override
@@ -25,7 +28,7 @@ public class ReplantCommand implements CommandExecutor {
 		
 		if (args.length == 0) {
 			String enabled = (user.isEnabled()) ? "enabled" : "disabled";
-			sender.sendMessage("Replanting is currently " + enabled + ".");
+			sender.sendMessage(PREFIX + "Replanting is currently " + enabled + ".");
 		}
 		
 		if (args.length > 0) {
@@ -34,32 +37,40 @@ public class ReplantCommand implements CommandExecutor {
 				case "enable":
 					if (user != null) {
 						user.setEnabled(true);
-						sender.sendMessage("Replanting is now enabled!");
+						if (config.isReplantForced(((Player) sender).getLocation())) {
+							sender.sendMessage(PREFIX + "Replanting is now enabled! (Replanting is forced in this region.)");
+						} else {
+							sender.sendMessage(PREFIX + "Replanting is now enabled!");
+						}
 					} else {
-						sender.sendMessage("You must be a player!");
+						sender.sendMessage(PREFIX + "You must be a player!");
 					}
 					break;
 				case "off":
 				case "disable":
 					if (user != null) {
 						user.setEnabled(false);
-						sender.sendMessage("Replanting is now disabled.");
+						if (config.isReplantForced(((Player) sender).getLocation())) {
+							sender.sendMessage(PREFIX + "Replanting is now disabled! (Replanting is forced in this region.)");
+						} else {
+							sender.sendMessage(PREFIX + "Replanting is now disabled!");
+						}
 					} else {
-						sender.sendMessage("You must be a player!");
+						sender.sendMessage(PREFIX + "You must be a player!");
 					}
 					break;
 				case "v":
 				case "version":
 				case "info":
-					sender.sendMessage("Replant v" + plugin.getDescription().getVersion() + " by QuartzDev");
+					sender.sendMessage(PREFIX + "Replant v" + plugin.getDescription().getVersion() + " by QuartzDev");
 					break;
 				default:
-					sender.sendMessage("Replant automatically replants crops when broken.");
+					sender.sendMessage(PREFIX + "Replant automatically replants crops when broken.");
 					if (user != null) {
 						if (user.isEnabled()) {
-							sender.sendMessage("Type " + ChatColor.GRAY + "/replant off" + ChatColor.WHITE + " to disable.");
+							sender.sendMessage(PREFIX + "Type " + SECONDARY_COLOR + "/replant off" + RESET_COLOR + " to disable.");
 						} else {
-							sender.sendMessage("Type " + ChatColor.GRAY + "/replant on" + ChatColor.WHITE + " to enable.");
+							sender.sendMessage(PREFIX + "Type " + SECONDARY_COLOR + "/replant on" + RESET_COLOR + " to enable.");
 						}
 					}
 					break;
