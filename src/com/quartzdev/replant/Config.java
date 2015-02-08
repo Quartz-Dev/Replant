@@ -1,6 +1,6 @@
 package com.quartzdev.replant;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -10,20 +10,27 @@ public class Config {
 	
 	private Configuration config;
 	private boolean immatureCrops;
-	private boolean enabled;
-	private List<Material> crops;
+	private long delay;
+	private HashMap<Material, Material> crops;
 	private boolean userDefault;
 	
 	public Config(Configuration config) {
 		this.config = config;
 		immatureCrops = config.getBoolean("immature-crops");
-		enabled = config.getBoolean("enabled");
 		userDefault = config.getBoolean("default");
+		delay = config.getLong("replace-delay");
 		
 		List<String> cropsString = config.getStringList("crops");
-		List<Material> crops = new ArrayList<Material>();
+		HashMap<Material, Material> crops = new HashMap<>();
 		for (String s : cropsString) {
-			crops.add(Material.valueOf(s));
+			if (s.contains("=>")) {
+				Material material1 = Material.getMaterial(s.toUpperCase().replaceAll(" ", "_").split("=>", 1)[0]);
+				Material material2 = Material.getMaterial(s.toUpperCase().replaceAll(" ", "_").split("=>", 1)[1]);
+				crops.put(material1, material2);
+			} else {
+				Material material = Material.getMaterial(s.toUpperCase().replaceAll(" ", "_"));
+				crops.put(material, material);
+			}
 		}
 		this.crops = crops;
 		
@@ -33,16 +40,20 @@ public class Config {
 		return immatureCrops;
 	}
 	
-	public boolean enabled() {
-		return enabled;
+	public HashMap<Material, Material> getCrops() {
+		return crops;
 	}
 	
-	public List<Material> getCrops() {
-		return crops;
+	public Material getReplacementCrop(Material m) {
+		return crops.get(m);
 	}
 	
 	public boolean getDefault() {
 		return userDefault;
+	}
+	
+	public long getDelay() {
+		return delay;
 	}
 	
 	public void setDefault(boolean userDefault) {

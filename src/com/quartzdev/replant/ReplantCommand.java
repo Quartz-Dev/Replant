@@ -1,10 +1,10 @@
 package com.quartzdev.replant;
 
-import static com.quartzdev.replant.Messages.msg;
-
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class ReplantCommand implements CommandExecutor {
@@ -21,34 +21,51 @@ public class ReplantCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String commandLabel, final String[] args) {
 		
-		if (!config.enabled()) {
-			if (sender.hasPermission("replant.admin")) {
-				sender.sendMessage(msg("pluginDisabledOp"));
-			} else {
-				sender.sendMessage(msg("pluginDisabled"));
-			}
-			return true;
-		}
+		ReplantUser user = (sender instanceof Player) ? ReplantUser.getUser(((Player) sender).getUniqueId()) : null;
 		
 		if (args.length == 0) {
-			sender.sendMessage(msg("version", plugin.getDescription().getVersion()));
-			sender.sendMessage(msg("on")); // TODO Check if the user has it on
-											// or off.
+			String enabled = (user.isEnabled()) ? "enabled" : "disabled";
+			sender.sendMessage("Replanting is currently " + enabled + ".");
 		}
 		
-		if (args.length == 1) {
+		if (args.length > 0) {
 			switch (args[0].toLowerCase()) {
 				case "on":
-					ReplantUser.setEnabled(sender, true);
+				case "enable":
+					if (user != null) {
+						user.setEnabled(true);
+						sender.sendMessage("Replanting is now enabled!");
+					} else {
+						sender.sendMessage("You must be a player!");
+					}
 					break;
 				case "off":
-					ReplantUser.setEnabled(sender, false);
+				case "disable":
+					if (user != null) {
+						user.setEnabled(false);
+						sender.sendMessage("Replanting is now disabled.");
+					} else {
+						sender.sendMessage("You must be a player!");
+					}
 					break;
-			
+				case "v":
+				case "version":
+				case "info":
+					sender.sendMessage("Replant v" + plugin.getDescription().getVersion() + " by QuartzDev");
+					break;
+				default:
+					sender.sendMessage("Replant automatically replants crops when broken.");
+					if (user != null) {
+						if (user.isEnabled()) {
+							sender.sendMessage("Type " + ChatColor.GRAY + "/replant off" + ChatColor.WHITE + " to disable.");
+						} else {
+							sender.sendMessage("Type " + ChatColor.GRAY + "/replant on" + ChatColor.WHITE + " to enable.");
+						}
+					}
+					break;
 			}
 		}
 		
-		return false;
+		return true;
 	}
-	
 }

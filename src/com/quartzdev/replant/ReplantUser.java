@@ -1,7 +1,5 @@
 package com.quartzdev.replant;
 
-import static com.quartzdev.replant.Messages.msg;
-
 import java.io.File;
 import java.util.MissingResourceException;
 import java.util.UUID;
@@ -22,40 +20,36 @@ public class ReplantUser {
 		this.enabled = enabled;
 	}
 	
-	protected static void onEnable(boolean userDefault) {
+	static void onEnable(boolean userDefault) {
 		ReplantUser.userDefault = userDefault;
 	}
 	
-	protected boolean isEnabled() {
+	boolean isEnabled() {
 		return enabled;
 	}
 	
-	protected void setEnabled(boolean enabled) {
+	void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 	
-	protected UUID getUUID() {
+	UUID getUUID() {
 		return id;
 	}
 	
-	protected static void setEnabled(CommandSender sender, boolean enabled) {
+	static void setEnabled(CommandSender sender, boolean enabled) {
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(msg("playerOnly"));
+			sender.sendMessage("This command can only be used by players");
 			return;
 		}
 		UUID id = ((Player) sender).getUniqueId();
 		ReplantUser user = getUser(id);
 		
 		user.setEnabled(enabled);
-		if (enabled) {
-			sender.sendMessage(msg("nowEnabled"));
-		} else {
-			sender.sendMessage(msg("nowDisabled"));
-		}
+		
 		return;
 	}
 	
-	private static ReplantUser getUser(UUID id) {
+	static ReplantUser getUser(UUID id) {
 		FileManager fMan = new FileManager(USER_FILE);
 		
 		try {

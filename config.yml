@@ -2,8 +2,6 @@
 ## Replant Configuration ##
 ###########################
 
- enabled: true
-
  crops:
    - Wheat
    - Carrot
@@ -11,7 +9,7 @@
    - Nether_Wart
    - Nether_Stalk
 
- 
+ replace-delay: 100
    
  immature-crops: false
  
