@@ -3,6 +3,7 @@ package com.quartzdev.replant;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
 
@@ -15,6 +16,8 @@ public class Config {
 	private boolean userDefault;
 	
 	public Config(Configuration config) {
+		Bukkit.broadcastMessage("Config loaded!");
+		
 		this.config = config;
 		immatureCrops = config.getBoolean("immature-crops");
 		userDefault = config.getBoolean("default");
@@ -24,11 +27,12 @@ public class Config {
 		HashMap<Material, Material> crops = new HashMap<>();
 		for (String s : cropsString) {
 			if (s.contains("=>")) {
-				Material material1 = Material.getMaterial(s.toUpperCase().replaceAll(" ", "_").split("=>", 1)[0]);
-				Material material2 = Material.getMaterial(s.toUpperCase().replaceAll(" ", "_").split("=>", 1)[1]);
+				Material material1 = Material.getMaterial(s.toUpperCase().replaceAll(" ", "_").split("=>", 2)[0]);
+				Material material2 = Material.getMaterial(s.toUpperCase().replaceAll(" ", "_").split("=>", 2)[1]);
 				crops.put(material1, material2);
 			} else {
 				Material material = Material.getMaterial(s.toUpperCase().replaceAll(" ", "_"));
+				Bukkit.broadcastMessage("Material Added: " + material);
 				crops.put(material, material);
 			}
 		}

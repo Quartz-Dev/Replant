@@ -30,6 +30,9 @@ public class ReplantUser {
 	
 	void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+		
+		FileManager fMan = new FileManager(USER_FILE);
+		fMan.setBoolean(id, enabled);
 	}
 	
 	UUID getUUID() {
@@ -37,10 +40,6 @@ public class ReplantUser {
 	}
 	
 	static void setEnabled(CommandSender sender, boolean enabled) {
-		if (!(sender instanceof Player)) {
-			sender.sendMessage("This command can only be used by players");
-			return;
-		}
 		UUID id = ((Player) sender).getUniqueId();
 		ReplantUser user = getUser(id);
 		

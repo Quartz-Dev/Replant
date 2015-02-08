@@ -17,6 +17,14 @@ public class FileManager {
 	
 	protected FileManager(File file) {
 		this.file = file;
+		file.getParentFile().mkdirs();
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	protected boolean getBoolean(UUID id) throws MissingResourceException {
@@ -52,12 +60,14 @@ public class FileManager {
 			BufferedReader in = new BufferedReader(readStream);
 			
 			String line;
+			boolean set = false;
 			while ((line = in.readLine()) != null) {
 				
 				if (!line.startsWith("#") || !line.isEmpty()) {
 					
 					if (line.startsWith(id.toString())) {
 						line = id.toString() + "=" + b;
+						set = true;
 					}
 					
 				}
@@ -67,6 +77,11 @@ public class FileManager {
 					out.newLine();
 				}
 				
+			}
+			
+			if (!set) {
+				out.write(id.toString() + "=" + b);
+				out.newLine();
 			}
 			
 			in.close();

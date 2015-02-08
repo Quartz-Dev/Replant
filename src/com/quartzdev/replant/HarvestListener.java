@@ -2,14 +2,12 @@ package com.quartzdev.replant;
 
 import java.util.Collection;
 
-import org.bukkit.CropState;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Crops;
 import org.bukkit.plugin.Plugin;
 
 public class HarvestListener implements Listener {
@@ -22,10 +20,10 @@ public class HarvestListener implements Listener {
 		this.config = config;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onBlockBreak(BlockBreakEvent event) {
 		Material brokenMaterial = event.getBlock().getType();
-		
 		ReplantUser user = ReplantUser.getUser(event.getPlayer().getUniqueId());
 		
 		if (user != null) {
@@ -35,24 +33,34 @@ public class HarvestListener implements Listener {
 		}
 		
 		Material replMaterial = config.getReplacementCrop(brokenMaterial);
-		if (replMaterial.equals(null)) {
+		if (replMaterial == null) {
 			return;
 		} else {
 			
-			Crops c = new Crops(brokenMaterial);
-			if (!config.usingImmatureCrops()) {
-				if (!c.getState().equals(CropState.RIPE)) {
-					return;
+			try {
+				byte b = event.getBlock().getData();
+				
+				if (!config.usingImmatureCrops()) {
+					if (b < 7) {
+						if (!(brokenMaterial.equals(Material.NETHER_WARTS) && b == 3)) {
+							return;
+						}
+					}
 				}
+				
+			} catch (ClassCastException e) {
+				// Do nothing.
 			}
 			
 			Collection<ItemStack> drops = event.getBlock().getDrops();
-			if (drops.contains(replMaterial)) {
+			ItemStack replStack = new ItemStack(replMaterial);
+			if (drops.contains(replStack)) {
 				event.getBlock().getDrops().remove(replMaterial);
-				Replacer replacer = new Replacer(event.getBlock(), replMaterial);
-				long delay = config.getDelay();
-				plugin.getServer().getScheduler().runTaskLater(plugin, replacer, delay);
 			}
+			Replacer replacer = new Replacer(event.getBlock(), replMaterial);
+			long delay = config.getDelay();
+			plugin.getServer().getScheduler().runTaskLater(plugin, replacer, delay);
+			
 		}
 		
 	}

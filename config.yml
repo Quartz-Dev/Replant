@@ -3,11 +3,10 @@
 ###########################
 
  crops:
-   - Wheat
+   - Crops
    - Carrot
    - Potato
-   - Nether_Wart
-   - Nether_Stalk
+   - Nether_Warts
 
  replace-delay: 100
    
